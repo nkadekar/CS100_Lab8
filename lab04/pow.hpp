@@ -3,6 +3,7 @@
 
 #include "base.hpp"
 #include "op.hpp"
+#include "../iterator.hpp"
 #include <string>
 #include <cmath>
 
@@ -12,11 +13,13 @@ class Pow: public Base {
    private:
 	   Base* leftChild = nullptr;
    	   Base* rightChild = nullptr;
+
     public:
 	   	Pow(Base* leftChild, Base* rightChild) {
 	   		this->leftChild = leftChild;
 			this->rightChild = rightChild;
 	   	}
+
 	   	virtual double evaluate() { 
 			return pow(leftChild->evaluate(), rightChild->evaluate()); 
 		}
@@ -26,6 +29,19 @@ class Pow: public Base {
 			inSS << std::setprecision(5) << leftChild->stringify() << " - " << rightChild->stringify();
 			return inSS.str();
 		}
+
+		virtual Iterator* create_iterator(){
+            Iterator* temp =  new BinaryIterator(this);
+            return temp;
+        }
+
+		virtual Base* get_left(){
+            return leftChild;
+        }
+
+        virtual Base* get_right(){
+            return rightChild;
+        }
 };
 
 #endif //__POW_HPP__
