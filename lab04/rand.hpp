@@ -35,6 +35,10 @@ class Rand: public Base {
         virtual Base* get_right(){
             return nullptr;
         }
+
+        virtual void accept(CountVisitor* v){
+            v->visit_rand();
+        }
 };
 
 #endif //__RAND_HPP__

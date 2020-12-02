@@ -40,6 +40,10 @@ class Add : public Base {
         virtual Base* get_right(){
             return _rChild;
         }
+
+        virtual void accept(CountVisitor* v){
+            v->visit_add();
+        }
 };
 
 #endif //__MULT_HPP__

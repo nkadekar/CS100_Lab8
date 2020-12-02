@@ -1,4 +1,5 @@
 #include "../iterator.hpp"
+#include "../visitor.hpp"
 #include "../lab04/mult.hpp"
 #include "../lab04/div.hpp"
 #include "../lab04/sub.hpp"
@@ -16,14 +17,19 @@ int main(){
     Base* Op1 = new Op(1);
     Base* Op2 = new Op(2);
     Base* Mult1 = new Mult(Op1, Op2);
+    Base* Dummy = new Pow(Mult1, new Rand());
 
-    Iterator* test = Mult1->create_iterator();
+    CountVisitor* v = new CountVisitor();
+    Iterator* test = new PreorderIterator(Dummy);
+    test->first();
 
     while (test->is_done() == false){
+        Base* phase = test->current();
+        phase->accept(v);
         test->next();
     }
 
-    cout << test->is_done() << endl;
-
+    cout << v->mult_count() << v->op_count() << v->rand_count() << v->pow_count() << endl;
+    //should be 1210
     return 0;
 }
