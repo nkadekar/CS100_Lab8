@@ -4,13 +4,6 @@ ADD_SUBDIRECTORY(googletest)
 
 SET(CMAKE_CXX_STANDARD 11)
 
-ADD_EXECUTABLE(lab
-    main.cpp
-    tests/unit_tests.cpp
-    binary_iterator.cpp
-    preorder_iterator.cpp
-)
-
 ADD_EXECUTABLE(test
     tests/unit_tests.cpp
     binary_iterator.cpp
