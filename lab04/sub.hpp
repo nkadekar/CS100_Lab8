@@ -41,5 +41,9 @@ class Sub : public Base {
         virtual Base* get_right(){
             return rightChild;
         }
+
+		virtual void accept(CountVisitor* v){
+            v->visit_sub();
+        }
 };
 #endif //__SUB_HPP__

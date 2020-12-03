@@ -40,6 +40,10 @@ class Mult : public Base {
         virtual Base* get_right(){
             return _rChild;
         }
+
+        virtual void accept(CountVisitor* v){
+            v->visit_mult();
+        }
 };
 
 #endif //__MULT_HPP__

@@ -38,7 +38,11 @@ class Op : public Base {
 
         virtual Base* get_right(){
             return nullptr;
-        }		
+        }
+
+        virtual void accept(CountVisitor* v){
+            v->visit_op();
+        }
 };
 
 #endif //__OP_HPP__

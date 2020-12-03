@@ -42,6 +42,10 @@ class Div : public Base {
         virtual Base* get_right(){
             return rightChild;
         }
+
+		virtual void accept(CountVisitor* v){
+            v->visit_div();
+        }
 };
 
 #endif //__DIV_HPP__
