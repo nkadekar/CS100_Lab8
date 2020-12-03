@@ -145,6 +145,28 @@ TEST(IteratorTest, TreeTest2){
     EXPECT_EQ(test->is_done(), true);
 }
 
+TEST(CountVisitorTest, SizeThreeTree){
+    Base* Op1 = new Op(1);
+    Base* Op2 = new Op(2);
+    Base* Mult1 = new Mult(Op1, Op2);
+    Base* Dummy = new Pow(Mult1, new Rand());
+
+    CountVisitor* v = new CountVisitor();
+    Iterator* test = new PreorderIterator(Dummy);
+    test->first();
+
+    while (test->is_done() == false){
+        Base* phase = test->current();
+        phase->accept(v);
+        test->next();
+    }
+
+    EXPECT_EQ(v->mult_count(), 1);
+    EXPECT_EQ(v->op_count(), 2);
+    EXPECT_EQ(v->rand_count(), 1);
+    EXPECT_EQ(v->pow_count(), 0);
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
