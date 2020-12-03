@@ -145,7 +145,7 @@ TEST(IteratorTest, TreeTest2){
     EXPECT_EQ(test->is_done(), true);
 }
 
-TEST(VisitorTest, BasicTest){
+TEST(CountVisitorTest, SizeThreeTree){
     Base* Op1 = new Op(1);
     Base* Op2 = new Op(2);
     Base* Mult1 = new Mult(Op1, Op2);
@@ -254,7 +254,6 @@ TEST(VisitorTest, ReuseOpTest){
     EXPECT_EQ(v->pow_count(), 1);
     EXPECT_EQ(v->add_count(), 0);
 }
-
 
 
 int main(int argc, char **argv) {
