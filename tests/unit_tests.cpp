@@ -145,6 +145,118 @@ TEST(IteratorTest, TreeTest2){
     EXPECT_EQ(test->is_done(), true);
 }
 
+TEST(VisitorTest, BasicTest){
+    Base* Op1 = new Op(1);
+    Base* Op2 = new Op(2);
+    Base* Mult1 = new Mult(Op1, Op2);
+    Base* Dummy = new Pow(Mult1, new Rand());
+
+    CountVisitor* v = new CountVisitor();
+    Iterator* test = new PreorderIterator(Dummy);
+    test->first();
+
+    while (test->is_done() == false){
+        Base* phase = test->current();
+        phase->accept(v);
+        test->next();
+    }
+
+	EXPECT_EQ(v->op_count(), 2);
+    EXPECT_EQ(v->pow_count(), 0);
+    EXPECT_EQ(v->mult_count(), 1);
+    EXPECT_EQ(v->rand_count(), 1);
+    EXPECT_EQ(v->div_count(), 0);
+}
+
+
+TEST(VisitorTest, TreeTest1){
+    Base* Op1 = new Op(1);
+    Base* Op2 = new Op(2);
+    Base* Op3 = new Op(3);
+    Base* Pow1 = new Pow(Op1, Op2);
+    Base* Mult1 = new Mult(Pow1, Op3);
+    Base* Div1 = new Div(Op1, Op3);
+    Base* Add1 = new Add(Mult1, Div1);
+
+    CountVisitor* v = new CountVisitor();
+    Iterator* test = new PreorderIterator(Add1);
+    test->first();
+
+    while (test->is_done() == false){
+        Base* phase = test->current();
+        phase->accept(v);
+        test->next();
+    }
+
+
+    EXPECT_EQ(v->pow_count(), 1);
+    EXPECT_EQ(v->mult_count(), 1);
+    EXPECT_EQ(v->rand_count(), 0);
+    EXPECT_EQ(v->div_count(), 1);
+    EXPECT_EQ(v->add_count(), 0);
+    EXPECT_EQ(v->sub_count(), 0);
+}
+
+TEST(VisitorTest, TreeTest2){
+	Base* Op1 = new Op(1);
+    Base* Op2 = new Op(2);
+    Base* Op3 = new Op(3);
+    Base* Op4 = new Op(4);
+    Base* Op5 = new Op(5);
+    Base* Op6 = new Op(6);
+
+    Base* Pow1 = new Pow(Op1, Op2);
+    Base* Mult1 = new Mult(Pow1, Op3);
+    Base* Div1 = new Div(Op1, Op3);
+    Base* Add1 = new Add(Mult1, Div1);
+    Base* Pow2 = new Pow(Op4, Add1);
+    Base* Mult2 = new Mult(Pow2, Op5);
+    Base* Div2 = new Div(Op5, Op2);
+    Base* Sub1 = new Add(Div2, Mult2);
+
+
+
+	CountVisitor* v = new CountVisitor();
+    Iterator* test = new PreorderIterator(Sub1);
+    test->first();
+
+    while (test->is_done() == false){
+        Base* phase = test->current();
+        phase->accept(v);
+        test->next();
+    }
+
+    EXPECT_EQ(v->pow_count(), 2);
+    EXPECT_EQ(v->mult_count(), 2);
+    EXPECT_EQ(v->rand_count(), 0);
+    EXPECT_EQ(v->div_count(), 2);
+    EXPECT_EQ(v->add_count(), 1);
+    EXPECT_EQ(v->sub_count(), 0);
+}
+
+TEST(VisitorTest, ReuseOpTest){
+    Base* Op1 = new Op(1);
+    Base* Op2 = new Op(2);
+    Base* Pow1 = new Pow(Op1, Op2);
+    Base* Mult1 = new Mult(Pow1, Op1);
+
+    CountVisitor* v = new CountVisitor();
+    Iterator* test = new PreorderIterator(Mult1);
+    test->first();
+
+    while (test->is_done() == false){
+        Base* phase = test->current();
+        phase->accept(v);
+        test->next();
+    }
+
+	EXPECT_EQ(v->op_count(), 3);
+    EXPECT_EQ(v->pow_count(), 1);
+    EXPECT_EQ(v->add_count(), 0);
+}
+
+
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
